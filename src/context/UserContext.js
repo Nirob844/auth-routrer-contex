@@ -1,22 +1,31 @@
 import React from 'react';
 import { useState } from 'react';
-import { getAuth } from 'firebase/auth'
+import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import { createContext } from 'react';
 import App from '../App';
 
-const AuthContext = createContext();
+export const AuthContext = createContext();
 
-const auth = getAuth(App)
+const auth = getAuth(App);
+
 
 const UserContext = ({ children }) => {
 
     const [user, setUser] = useState({ displayName: 'Nirob' });
-    const authInfo = {}
+
+    const createUser = (email, password) => {
+        return createUserWithEmailAndPassword(auth, email, password);
+    }
+    const signIn = (email, password) => {
+        return signInWithEmailAndPassword(auth, email, password);
+    }
+    const authInfo = { user, createUser, signIn }
 
 
     return (
         <AuthContext.Provider value={authInfo}>
-            {children}</AuthContext.Provider>
+            {children}
+        </AuthContext.Provider>
     );
 };
 
